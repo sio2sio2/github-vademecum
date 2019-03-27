@@ -11,8 +11,8 @@ Tras instalar es conveniente antes de empezar:
    $ git config --glonal user.email "perico@example.com"
    $ git config --global credential-helper "cache --timeout=3600"
 
-Obtención del repositorio
-=========================
+Obtención del repositorio remoto
+================================
 
 * En caso de que no lo tengamos aún copiado en el disco local:
 
@@ -27,3 +27,40 @@ Obtención del repositorio
 
      $ cd ~/Proyectos/prueba2
      $ git pull
+
+Actualización del repositorio remoto
+====================================
+Después de haber hecho cambios, es posible ver qué ficheros
+han aparecido, desaparecido o cambiado con:
+
+.. code-block:: console
+
+   $ git status 
+
+Y para ver más precisamente los cambios:
+
+.. code-block:: console
+
+   $ git diff
+
+Para actualizar el repositorio remoto debe hacerse:
+
+1. Aplicar los cambios:
+
+   .. code-block:: console
+
+      $ git add --all .
+
+   .. note:: Pueden excluirse ficheros locales de la operación creando el fichero :file:`.gitignore` dentro del cual se incluyen los nombres de los ficheros, uno por línea.  Es posible usar los comodices de la *shell*.
+
+2. Confirmar los cambios
+
+   .. code-block:: console
+
+      $ git commit -m "Comentario al respecto"
+
+3. Guardar los cambios en el repositorio remoto
+
+   .. code-block:: console
+
+      $ git push
