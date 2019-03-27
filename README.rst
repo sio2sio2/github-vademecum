@@ -51,7 +51,7 @@ Para actualizar el repositorio remoto debe hacerse:
 
       $ git add --all .
 
-   .. note:: Pueden excluirse ficheros locales de la operación creando el fichero :file:`.gitignore` dentro del cual se incluyen los nombres de los ficheros, uno por línea.  Es posible usar los comodices de la *shell*.
+   .. note:: Pueden excluirse ficheros locales de la operación creando el fichero ``.gitignore`` dentro del cual se incluyen los nombres de los ficheros, uno por línea.  Es posible usar los comodices de la *shell*.
 
 2. Confirmar los cambios
 
@@ -64,3 +64,20 @@ Para actualizar el repositorio remoto debe hacerse:
    .. code-block:: console
 
       $ git push
+
+Ramas
+=====
+Para crear una nueva rama de desarrollo y saltar a ella:
+
+.. code-block:: console
+
+   $ git checkout -b test
+
+Versiones
+=========
+Para etiquetar un estado como versión:
+
+.. code-block:: console
+
+   $ git tag -a 1.0 -m "Versión 1.0"
+   $ git push --tags
