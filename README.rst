@@ -73,6 +73,19 @@ Para crear una nueva rama de desarrollo y saltar a ella:
 
    $ git checkout -b test
 
+Ahora se podrá trabajar sobre la rama **test**, tal como ya se ha descrito. Ahora bien, para subir los cambios al servdor debe hacerse:
+
+.. code-block:: console
+
+   $ git push origin test
+
+Para fusionar la rama **test** con **master**:
+
+.. code-block:: console
+
+   $ git checkout master  # Volvemos a la rama master.
+   $ git merge test
+
 Versiones
 =========
 Para etiquetar un estado como versión:
