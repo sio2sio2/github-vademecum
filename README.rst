@@ -21,8 +21,7 @@ Obtención del repositorio
      $ mkdir ~/Proyectos
      $ git clone https://github.com/sio2sio2/pruebas2.git
 
-* En caso de que ya se tuviera y se desee actualizar con los cambios
-  habidos en el servidor:
+* En caso de que ya se tuviera el proyecto en local y se desee actualizar con los últimos cambios habidos en el servidor:
 
   .. code-block:: console
 
