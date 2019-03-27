@@ -86,6 +86,13 @@ Para fusionar la rama **test** con **master**:
    $ git checkout master  # Volvemos a la rama master.
    $ git merge test
 
+Para eliminar la rama:
+
+.. code-block::
+
+   $ git push origin --delete test  # Borra la rama de git.
+   $ git branch -d test             # Borra la rama del repositorio local.
+
 Versiones
 =========
 Para etiquetar un estado como versión:
