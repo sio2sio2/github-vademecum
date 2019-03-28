@@ -86,7 +86,7 @@ Para fusionar la rama **test** con **master**:
    $ git checkout master  # Volvemos a la rama master.
    $ git merge test
 
-En `este enlace <https://gist.github.com/aaossa/7db152babead60ab097ba2c898d379a6>`_ esplican mejor esto e las ramas.
+En `este enlace <https://gist.github.com/aaossa/7db152babead60ab097ba2c898d379a6>`_ explican mejor esto e las ramas.
 
 Versiones
 =========
