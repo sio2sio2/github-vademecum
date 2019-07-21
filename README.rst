@@ -1,8 +1,7 @@
-Brevísimo recetario para manejarme en github
-********************************************
-
-Configuración del git local
-===========================
+Vademécum
+*********
+Configuración del *git* local
+=============================
 Tras instalar es conveniente antes de empezar:
 
 .. code-block:: console
@@ -11,82 +10,161 @@ Tras instalar es conveniente antes de empezar:
    $ git config --glonal user.email "perico@example.com"
    $ git config --global credential-helper "cache --timeout=3600"
 
-Obtención del repositorio remoto
-================================
+Creación de un repositorio
+==========================
+Al crear un repositorio tenemos dos alternativas:
 
-* En caso de que no lo tengamos aún copiado en el disco local:
+- Clonar un repositorio ya creado.
+- Crear uno *ex novo*.
 
-  .. code-block:: console
-
-     $ mkdir ~/Proyectos
-     $ git clone https://github.com/sio2sio2/pruebas2.git
-
-* En caso de que ya se tuviera el proyecto en local y se desee actualizar con los últimos cambios habidos en el servidor:
-
-  .. code-block:: console
-
-     $ cd ~/Proyectos/prueba2
-     $ git pull
-
-Actualización del repositorio remoto
-====================================
-Después de haber hecho cambios, es posible ver qué ficheros
-han aparecido, desaparecido o cambiado con:
+Clonación
+---------
 
 .. code-block:: console
 
-   $ git status 
+  $ git clone https://github.com/sio2sio2/proyecto.git
 
-Y para ver más precisamente los cambios:
+Creación
+--------
 
 .. code-block:: console
 
-   $ git diff
+   $ mkdir proyecto
+   $ cd proyecto
+   $ git init
+   $ cat > .gitignore
+   **.bak
+   **.swp
+   $ echo "Documentacion..." > README.rst
 
-Para actualizar el repositorio remoto debe hacerse:
+.. note:: :file:`,gitignore` excluye ficheros que no queramos que formen parte
+   del repositorio. En este caso, hemos incluido copias de seguridad y archivos
+   de intercambio de :program:`vim`. La notación :code:`**.ext`` significa
+   todo fichero con la extensión indicada esté en el subdirectorio que esté.
 
-1. Aplicar los cambios:
+Si se desea crear un nuevo repositorio en Github_ a partir de este nuevo, hay
+que crearlo a través de la web sin inicializarlo (o sea sin crearle un
+:file:`README.md`), :ref:`actualizar el repositorio <update>`_ y finalmente:
 
-   .. code-block:: console
+.. code-block::
 
-      $ git add --all .
+   $ git remote add origin https://github.com/sio2sio2/proyecto.git
+   $ git push -u origin master
 
-   .. note:: Pueden excluirse ficheros locales de la operación creando el fichero ``.gitignore`` dentro del cual se incluyen los nombres de los ficheros, uno por línea.  Es posible usar los comodices de la *shell*.
+Actualización
+=============
+Desde local
+-----------
+Si se han modificado ficheros en el repositorio local, pueden comprobarse los
+cambios del siguiente modo:
 
-2. Confirmar los cambios
+.. code-block:: console
 
-   .. code-block:: console
+   $ cd proyecto
+   $ git status  # Conocemos la rama en la que estamos y cuáles son los ficheros.
+   $ git diff    # Si queremos ver las diferencias entre los ficheros.
+   $ git diff -- fichero  # Para ver los cambios en el fichero referido.
 
-      $ git commit -m "Comentario al respecto"
+Para llevar a cabo la actualización:
 
-3. Guardar los cambios en el repositorio remoto
+.. code-block:: console
 
-   .. code-block:: console
+   $ git add --all .
+   $ git commit -m "Comentario que describa la actualización"
 
-      $ git push
+Y si queremos sincronizar con el directorio remoto:
+
+.. code-block:: console
+
+   $ git push
+
+Desde remoto
+------------
+Si ya se disponía de una copia local del repositorio, pero la versión remota de
+éste cambió (p.e. porque otro desarrollador realizó cambios), pueden obtenerse
+las últimas modificaciones así:
+
+.. code-block:: console
+
+   $ cd proyecto
+   $ git pull
+
+.. warning:: Tenga en cuenta que es común que un proyecto disponga de
+   :ref:`distintas ramas <branch>`.
+
+.. SEGUIR POR AQUÍ
 
 Ramas
 =====
-Para crear una nueva rama de desarrollo y saltar a ella:
+Las diversas ramas de un mismo repositorio permiten tener simultáneamente
+distintas variantes del desarrollo. Por ejemplo, un desarrollador puede abrir
+una rama nueva para implementar una nueva funcionalidad y, cuando la tenga lista
+y se apruebe su inclusión, fusionarla con la rama principal.
+
+La rama principal (la que se crea al crear el repositorio) se llama *master*. Es
+común también crear otra rama llamada *development* donde van convergiendo las
+distintas ramas que aparecen y desaparecen según las necesidades.
+
+Creación
+--------
+.. code-block:: console
+
+   $ git checkout -b development
+
+Esto clona la rama en la que se esté actualmente (supongamos que *master*) en
+otra llama *development* y nos camb ia a ella. Ahora si se hace:
 
 .. code-block:: console
 
-   $ git checkout -b test
+   $ git status
 
-Ahora se podrá trabajar sobre la rama **test**, tal como ya se ha descrito. Ahora bien, para subir los cambios al servdor debe hacerse:
-
-.. code-block:: console
-
-   $ git push origin test
-
-Para fusionar la rama **test** con **master**:
+Comprobaremos que nos encontramos en la rama *development*. Ahora podemos
+realizar cambios sobre esta rama y actualizarma como ya se ha visto. Si queremos
+subir la rama al servidor de Github_:
 
 .. code-block:: console
 
-   $ git checkout master  # Volvemos a la rama master.
-   $ git merge test
+   $ git push -u origin development
 
-En `este enlace <https://gist.github.com/aaossa/7db152babead60ab097ba2c898d379a6>`_ explican mejor esto e las ramas.
+pero sólo esta primera vez para sincronizar la rama con una rama aún inexistente
+en el servidor también llamada *development*. A partir de este momento, las
+siguientes sincronizaciones sí podremos hacerlas como ya se indicó:
+
+.. code-block:: console
+
+   $ git push
+
+Cambio
+------
+Para cambiar entre ramas:
+
+.. code-block:: console
+
+   $ git checkout master
+
+donde *master* es el nombre de la rama a la que queremos cambiar.
+
+Fusion
+------
+Para fusionar la rama *development* con con la actual (*master*):
+
+.. code-block:: console
+
+   $ git merge development
+
+Borrado
+-------
+Para borrar una rama local:
+
+.. code-block:: console
+
+   $ git branch -d development
+
+Y si se quiere borrar del repositorio remoto:
+
+.. code-block:: console
+
+   $ git push origin :development
 
 Versiones
 =========
@@ -96,3 +174,5 @@ Para etiquetar un estado como versión:
 
    $ git tag -a 1.0 -m "Versión 1.0"
    $ git push --tags
+
+.. _Github: https://github.com
