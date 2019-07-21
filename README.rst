@@ -172,7 +172,20 @@ Para etiquetar un estado como versión:
 
 .. code-block:: console
 
-   $ git tag -a 1.0 -m "Versión 1.0"
+   $ git tag -a v1.0 -m "Versión 1.0"
    $ git push --tags
+
+Para eliminar una etiqueta en local basta con:
+
+.. code-block:: console
+
+   $ git tag -d v1.0
+
+y para eliminarla en el repositorio remoto, se hace de la misma forma que cuando
+se eliminan ramas:
+
+.. code-block:: console
+
+   $ git push origin :v1.0
 
 .. _Github: https://github.com
