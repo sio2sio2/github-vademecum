@@ -60,9 +60,9 @@ dos posibilidades:
          --post-data '{"name": "proyecto", "description": "Una descripción del proyecto"}' \
          https://api.github.com/user/repos
 
-para después :ref:`actualizar el repositorio <update>`_ y finalmente:
+para después `actualizar el repositorio <update>`_ y finalmente:
 
-.. code-block::
+.. code-block:: console
 
    $ git remote add origin https://github.com/sio2sio2/proyecto.git
    $ git push -u origin master
