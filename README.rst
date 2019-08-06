@@ -160,7 +160,7 @@ Para cambiar entre ramas:
 
 donde *master* es el nombre de la rama a la que queremos cambiar.
 
-Fusion
+Fusión
 ------
 Para fusionar la rama *development* con con la actual (*master*):
 
