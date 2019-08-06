@@ -67,6 +67,8 @@ para después `actualizar el repositorio <update>`_ y finalmente:
    $ git remote add origin https://github.com/sio2sio2/proyecto.git
    $ git push -u origin master
 
+.. _update:
+
 Actualización
 =============
 Desde local
