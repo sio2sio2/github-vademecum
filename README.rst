@@ -37,7 +37,7 @@ Creación
    **.swp
    $ echo "Documentacion..." > README.rst
 
-.. note:: :file:`,gitignore` excluye ficheros que no queramos que formen parte
+.. note:: ``,gitignore`` excluye ficheros que no queramos que formen parte
    del repositorio. En este caso, hemos incluido copias de seguridad y archivos
    de intercambio de **vim**. La notación :code:`**.ext`` significa
    todo fichero con la extensión indicada esté en el subdirectorio que esté.
@@ -46,7 +46,7 @@ Si se desea crear un nuevo repositorio en Github_ a partir de este nuevo, hay
 dos posibilidades:
 
 - Crearlo a través de la web sin inicializarlo (o sea sin crearle un
-  :file:`README.md`),
+  ``README.md``),
 
 - Crearlo a través de la `API REST de Github
   <https://developer.github.com/v3/repos/>`_, después de haber `definido un
@@ -60,14 +60,12 @@ dos posibilidades:
          --post-data '{"name": "proyecto", "description": "Una descripción del proyecto"}' \
          https://api.github.com/user/repos
 
-para después `actualizar el repositorio <update>`_ y finalmente:
+para después realizar una `Actualización`_ y finalmente:
 
 .. code-block:: console
 
    $ git remote add origin https://github.com/sio2sio2/proyecto.git
    $ git push -u origin master
-
-.. _update:
 
 Actualización
 =============
