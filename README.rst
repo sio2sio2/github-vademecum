@@ -39,7 +39,7 @@ Creación
 
 .. note:: :file:`,gitignore` excluye ficheros que no queramos que formen parte
    del repositorio. En este caso, hemos incluido copias de seguridad y archivos
-   de intercambio de :program:`vim`. La notación :code:`**.ext`` significa
+   de intercambio de **vim**. La notación :code:`**.ext`` significa
    todo fichero con la extensión indicada esté en el subdirectorio que esté.
 
 Si se desea crear un nuevo repositorio en Github_ a partir de este nuevo, hay
