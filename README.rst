@@ -106,7 +106,7 @@ las últimas modificaciones así:
    $ git pull
 
 .. warning:: Tenga en cuenta que es común que un proyecto disponga de
-   :ref:`distintas ramas <branch>`.
+   distintas `ramas`_.
 
 .. SEGUIR POR AQUÍ
 
