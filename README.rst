@@ -43,8 +43,24 @@ Creación
    todo fichero con la extensión indicada esté en el subdirectorio que esté.
 
 Si se desea crear un nuevo repositorio en Github_ a partir de este nuevo, hay
-que crearlo a través de la web sin inicializarlo (o sea sin crearle un
-:file:`README.md`), :ref:`actualizar el repositorio <update>`_ y finalmente:
+dos posibilidades:
+
+- Crearlo a través de la web sin inicializarlo (o sea sin crearle un
+  :file:`README.md`),
+
+- Crearlo a través de la `API REST de Github
+  <https://developer.github.com/v3/repos/>`_, después de haber `definido un
+  token apropiado <https://github.com/settings/tokens>`_, esto es, un *token*
+  que tenga habilitado al menos el `alcance public_repo
+  <https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/#available-scopes>`_:
+
+  .. code-block:: console
+
+     $ wget -qO - -S --header "Authorization: token XXXXXXX" \
+         --post-data '{"name": "proyecto", "description": "Una descripción del proyecto"}' \
+         https://api.github.com/user/repos
+
+para después :ref:`actualizar el repositorio <update>`_ y finalmente:
 
 .. code-block::
 
