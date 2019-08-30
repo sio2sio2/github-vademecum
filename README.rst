@@ -88,7 +88,12 @@ Para llevar a cabo la actualización:
    $ git add --all .
    $ git commit -m "Comentario que describa la actualización"
 
-Y si queremos sincronizar con el directorio remoto:
+Si la actualización requiere un comentario más exaustivo. se puede utilizar un
+fichero con sintaxis Markdown_::
+
+   $ git commit -F comentario.md
+
+Por último, si queremos sincronizar con el directorio remoto:
 
 .. code-block:: console
 
@@ -107,8 +112,6 @@ las últimas modificaciones así:
 
 .. warning:: Tenga en cuenta que es común que un proyecto disponga de
    distintas `ramas`_.
-
-.. SEGUIR POR AQUÍ
 
 Ramas
 =====
@@ -205,3 +208,4 @@ se eliminan ramas:
    $ git push origin :v1.0
 
 .. _Github: https://github.com
+.. _Markdown:  https://daringfireball.net/projects/markdown/
