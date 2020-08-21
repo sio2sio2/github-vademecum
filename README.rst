@@ -207,5 +207,26 @@ se eliminan ramas:
 
    $ git push origin :v1.0
 
+Regresión
+=========
+En alguna ocasión puede ser útil volver a un estado antiguo. Para ello podemos
+crear una rama independiente:
+
+.. code-block:: console
+
+   $ git checkout -b test
+
+y cambiar al commit que deseemos:
+
+.. code-block::
+
+   $ git log --oneline
+   f446e5e (HEAD -> test) Comentario...
+   8abe916 Comentario...
+   2c595db Comentario...
+   bfe76b5 Comentario...
+   $ git reset 2c595db
+   $ git restore .
+
 .. _Github: https://github.com
 .. _Markdown:  https://daringfireball.net/projects/markdown/
