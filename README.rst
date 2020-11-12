@@ -10,7 +10,7 @@ Tras instalar es conveniente antes de empezar:
    $ git config --glonal user.email "perico@example.com"
    $ git config --global credential-helper "cache --timeout=3600"
 
-La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo, si se tiene configurado un gestor de contraseñas como `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_m entonces es mejor utilizarlo mediante:
+La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo, si se tiene configurado un gestor de contraseñas como `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_ entonces es mejor utilizarlo mediante:
 
 .. code-block:: console
 
