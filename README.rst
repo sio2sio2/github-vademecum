@@ -16,7 +16,7 @@ La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo
 
    $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
 
-Es probable que la districión no disponga del complemento compilado y haya que hacerlo a mano como se explcia en `este tutorial <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+Es probable que la distribución no disponga del complemento compilado y haya que hacerlo a mano como se explcia en `este tutorial <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
 
 Creación de un repositorio
 ==========================
