@@ -10,6 +10,14 @@ Tras instalar es conveniente antes de empezar:
    $ git config --glonal user.email "perico@example.com"
    $ git config --global credential-helper "cache --timeout=3600"
 
+La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo, si se tiene configurado un gestor de contraseñas como `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_m entonces es mejor utilizarlo mediante:
+
+.. code-block:: console
+
+   $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
+
+Es probable que la districión no disponga del complemento compilado y haya que hacerlo a mano como se explcia en `este tutorial <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+
 Creación de un repositorio
 ==========================
 Al crear un repositorio tenemos dos alternativas:
