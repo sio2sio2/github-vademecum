@@ -217,6 +217,8 @@ se eliminan ramas:
 
 Regresión
 =========
+Commit antiguo
+--------------
 En alguna ocasión puede ser útil volver a un estado antiguo. Para ello podemos
 crear una rama independiente:
 
@@ -235,6 +237,31 @@ y cambiar al commit que deseemos:
    bfe76b5 Comentario...
    $ git reset 2c595db
    $ git restore .
+
+Archivos
+--------
+Si queremos deshacer los cambios hechos en un archivo que aún no se han fijado
+con un commit tenemos dos posibilidaes:
+
+* Si ya se hizo un ``git add`` (el archivo aparece en verde al ahcer un *status*),
+  podemos hacer:
+
+  .. code-bloc:: console
+
+     $ git restore --staged --worktree -- path/archivo
+
+  Si se prescinde de ``--worktree`` el archivo  quedará en el estado anterior al
+  ``git add`` (en rojo).  Si se especifica un directorio se restaurán todos los
+  archivos modificados dentro de él.
+
+* Si el archivo está modificado, pero sin haber hecho un ``git add`` (aparece en
+  rojo):
+
+  .. code-block:: console
+
+     $ get restore -- pàth(archivo
+     
+  Esto eliminará todos los cambios en el archivo.
 
 .. _Github: https://github.com
 .. _Markdown:  https://daringfireball.net/projects/markdown/
