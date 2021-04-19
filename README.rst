@@ -246,7 +246,7 @@ con un commit tenemos dos posibilidaes:
 * Si ya se hizo un ``git add`` (el archivo aparece en verde al ahcer un *status*),
   podemos hacer:
 
-  .. code-bloc:: console
+  .. code-block:: console
 
      $ git restore --staged --worktree -- path/archivo
 
