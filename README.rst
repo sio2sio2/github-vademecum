@@ -15,6 +15,7 @@ La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo
 .. code-block:: console
 
    $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
+   $ git config --global credential.credentialStore secretservice
 
 Es probable que la distribución no disponga del complemento compilado y haya que hacerlo a mano como se explcia en `este tutorial <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
 
