@@ -10,14 +10,26 @@ Tras instalar es conveniente antes de empezar:
    $ git config --glonal user.email "perico@example.com"
    $ git config --global credential-helper "cache --timeout=3600"
 
-La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo, si se tiene configurado un gestor de contraseñas como `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_ entonces es mejor utilizarlo mediante:
+La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo,
+si se tiene configurado un gestor de contraseñas como `Gnome Keyring
+<https://wiki.gnome.org/Projects/GnomeKeyring>`_ entonces es mejor utilizarlo
+mediante:
 
 .. code-block:: console
 
    $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
    $ git config --global credential.credentialStore secretservice
 
-Es probable que la distribución no disponga del complemento compilado y haya que hacerlo a mano como se explcia en `este tutorial <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+Es probable que la distribución no disponga del complemento compilado y haya que
+hacerlo a mano como se explcia en `este tutorial
+<https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+
+Desde hace algún tiempo, ya no se permite el acceso con usuario y contraseña, y
+es necesario crear un token de acceso personal que es el que sustituye a la
+contraseña en las autenticaciones, y se obtiene en la página de Github a través
+de ``Settings>Developer Settings>Access Personal Token``. Estos *tokens* son
+largos y complicados de memorizar por lo que se hace indispensable usar un
+gestor de contraseñas.
 
 Creación de un repositorio
 ==========================
@@ -263,6 +275,74 @@ con un commit tenemos dos posibilidaes:
      $ get restore -- path/archivo
      
   Esto eliminará todos los cambios en el archivo.
+
+Varias cuentas
+==============
+Cuando se tienen varias cuentas en Github (p.e. una personal y otra de trabajo)
+nos encontraremos con el problema que el gestor de contraseñas, en principio,
+almacena estas credenciales atendiendo únicamente el nombre de máquina
+(`github.com`), por lo que únicamente podremos usar unas únicas credenciales.
+Tenemos al menos dos alternativas para solucionarlo:
+
+#. Usar el nombre del usuario como parte del nombre de máquina, es decir, en
+   vez de haber relacionado directorio local con repositorio remoto así:
+
+   .. code-block:: console
+
+      $ git remote add origin https://github.com/sio2sio2/proyecto.git
+
+   deberíamos relacionarlo así:
+
+   .. code-block:: console
+
+      $ git remote add origin https://sio2sio2@github.com/sio2sio2/proyecto.git
+
+   Y en caso de que está relación ya la hubiéramos hecho, aún podríamos acceder
+   al archivo `.git/config` y editar la URL en la directiva correspondiente para
+   añadir el usuario al nombre.
+
+   La ventaja de este procedimiento es que no necesitaremos introducir
+   nuevamente el token cada vez que creemos un repositorio relacionado con el
+   usuario.
+
+#. Añadir a la configuración global:
+
+   .. code-block:: console
+
+      $ git config --global credential.useHttpPath "true"
+
+   que provoca que al apuntar las credenciales en el gestor se use toda la URL y
+   no solamente el nombre de máquina. La desventaja de esta solución es que cada
+   vez que creemos un repositorio nuevo, tendremos que facilitar las
+   credenciales.
+
+Cualquiera de las dos alternativas nos solucionaría la autenticación. Sin
+embargo, también es probable que queramos cambiar quién será el que rece como
+autor de los cambios. Para ello puede utilizarse la `configuración condicional
+<https://github.blog/2017-05-10-git-2-13-has-been-released/#conditional-configuration>`_
+introducida a partir de :program:`git` 2.13. De este modo, si tuviéramos la
+prevención de que los desarrollos de uno de los usuarios siempre estuvieran
+dentro de la misma ruta podríamos hacer:
+
+.. code-block::
+
+   # Esto es ~/.gitconfig
+   [user]
+   name = Perico de los Palotes
+   email = perico@example.com
+
+   [includeIf "gitdir:~/Programacion/Trabajo/"]
+   path = ~/Programacion/Trabajo/.gitconfig
+
+Y en ese segundo archivo de configuración:
+
+.. code-block::
+
+   # Esto es ~/Programacion/Trabajo/.gitconfig
+   [user]
+   name = Pedro Palotes
+   email = pedropalotes@corporacion.com
+
 
 .. _Github: https://github.com
 .. _Markdown:  https://daringfireball.net/projects/markdown/
