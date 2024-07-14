@@ -345,7 +345,7 @@ Tenemos al menos tres alternativas para solucionarlo:
    la configuración condicional que trataremos después o definir las
    credenciales dependiendo de cuál sea la ruta con la que sincronicemos:
 
-   .. code-block:: console
+   .. code-block:: ini
 
       [credential "https://github.com/sio2sio2/"]
       helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
@@ -362,7 +362,7 @@ introducida a partir de :program:`git` 2.13. De este modo, si tuviéramos la
 prevención de que los desarrollos de uno de los usuarios siempre estuvieran
 dentro de la misma ruta podríamos hacer:
 
-.. code-block::
+.. code-block:: ini
 
    # Esto es ~/.gitconfig
    [user]
@@ -374,7 +374,7 @@ dentro de la misma ruta podríamos hacer:
 
 Y en ese segundo archivo de configuración:
 
-.. code-block::
+.. code-block:: ini
 
    # Esto es ~/Programacion/Trabajo/.gitconfig
    [user]
