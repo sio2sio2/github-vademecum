@@ -260,7 +260,7 @@ con un commit tenemos dos posibilidaes:
 
   .. code-block:: console
 
-     $ get restore -- pàth(archivo
+     $ get restore -- path/archivo
      
   Esto eliminará todos los cambios en el archivo.
 
