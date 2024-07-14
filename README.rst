@@ -2,34 +2,57 @@ Vademécum
 *********
 Configuración del *git* local
 =============================
-Tras instalar es conveniente antes de empezar:
+Tras instalar es conveniente antes de empezar  indicar cuál es el usuario que
+realizará los cambios:
 
 .. code-block:: console
 
    $ git config --global user.name "Perico de los Palotes"
    $ git config --glonal user.email "perico@example.com"
-   $ git config --global credential-helper "cache --timeout=3600"
 
-La última línea conserva memoria de la contraseña durante 1 hora. Sin embargo,
-si se tiene configurado un gestor de contraseñas como `Gnome Keyring
-<https://wiki.gnome.org/Projects/GnomeKeyring>`_ entonces es mejor utilizarlo
-mediante:
+Y agilizar las autenticaciones:
 
 .. code-block:: console
 
-   $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
-   $ git config --global credential.credentialStore secretservice
+   $ git config --global credential-helper "cache --timeout=3600"
 
-Es probable que la distribución no disponga del complemento compilado y haya que
-hacerlo a mano como se explcia en `este tutorial
-<https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+Esta última línea conserva en memoria la contraseña durante 1 hora. El problema
+de esta solución es que Github últimamente no permite el acceso mediante usuario
+y contraseña, con lo que tenemos dos alternativas prácticas:
 
-Desde hace algún tiempo, ya no se permite el acceso con usuario y contraseña, y
-es necesario crear un token de acceso personal que es el que sustituye a la
-contraseña en las autenticaciones, y se obtiene en la página de Github a través
-de ``Settings>Developer Settings>Access Personal Token``. Estos *tokens* son
-largos y complicados de memorizar por lo que se hace indispensable usar un
-gestor de contraseñas.
++ Utilizar un **token personal de acceso**, que sustituirá a la contraseña en
+  las autenticaciones y se genera en la propia página de Github a través de
+  ``Settings>Developer Settings>Access Personal Token``. Estos *tokens* son muy
+  largos y complicados de memorizar y digitalizar por lo que se hace
+  indispensable usar un gestor de contraseñas. En *Linux* puede usarse el
+  derivado de `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_:
+
+  .. code-block:: console
+
+     $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
+     $ git config --global credential.credentialStore secretservice
+
+  Es probable que la distribución no disponga del complemento compilado y
+  haya que hacerlo a mano como se explica en `este tutorial
+  <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
+
+  Hecho esto, la primera vez habrá que autenticarse usando el usuario y este
+  largo token, pero las restantes veces no será necesario, porque las
+  credenciales quedarán almacenadas en el gestor de contraseñas.
+
++ Utilizar la autenticación OAuth para lo cual existe en las modernas
+  distribuciones  :command:`git-credential-oauth`. Instalada en el sistema,
+  puede usarse esta configuración:
+
+  .. code-block:: console
+
+     $ git config --global credential-helper "cache --timeout=3600"
+     $ git config --global credential-helper oauth
+
+  De esta forma, al autenticarnos, el proceso de validación nos derivará el
+  navegador para nos validemos y durante una hora las credenciales serán
+  recordadas. Es importante que este sea el orden (primero la declaración de
+  usar la caché), porque de lo contrario la caché no funcionará.
 
 Creación de un repositorio
 ==========================
@@ -282,7 +305,7 @@ Cuando se tienen varias cuentas en Github (p.e. una personal y otra de trabajo)
 nos encontraremos con el problema que el gestor de contraseñas, en principio,
 almacena estas credenciales atendiendo únicamente el nombre de máquina
 (`github.com`), por lo que únicamente podremos usar unas únicas credenciales.
-Tenemos al menos dos alternativas para solucionarlo:
+Tenemos al menos tres alternativas para solucionarlo:
 
 #. Usar el nombre del usuario como parte del nombre de máquina, es decir, en
    vez de haber relacionado directorio local con repositorio remoto así:
@@ -305,6 +328,8 @@ Tenemos al menos dos alternativas para solucionarlo:
    nuevamente el token cada vez que creemos un repositorio relacionado con el
    usuario.
 
+   Esta técnica parece no funcionar. Al menos con :command:`git-credential-libsecret`
+
 #. Añadir a la configuración global:
 
    .. code-block:: console
@@ -316,7 +341,20 @@ Tenemos al menos dos alternativas para solucionarlo:
    vez que creemos un repositorio nuevo, tendremos que facilitar las
    credenciales.
 
-Cualquiera de las dos alternativas nos solucionaría la autenticación. Sin
+#. Usar sendos métodos de validación (helper) diferentes para lo que podemos usar
+   la configuración condicional que trataremos después o definir las
+   credenciales dependiendo de cuál sea la ruta con la que sincronicemos:
+
+   .. code-block:: console
+
+      [credential "https://github.com/sio2sio2/"]
+      helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+      credentialStore = secretservice
+      [credential "https://github.com/otrousuario/"]
+      helper = "cache --timeout=7200"
+      helper = oauth
+
+Cualquiera de las tres alternativas nos solucionaría la autenticación. Sin
 embargo, también es probable que queramos cambiar quién será el que rece como
 autor de los cambios. Para ello puede utilizarse la `configuración condicional
 <https://github.blog/2017-05-10-git-2-13-has-been-released/#conditional-configuration>`_
