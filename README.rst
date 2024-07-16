@@ -146,13 +146,24 @@ Por último, si queremos sincronizar con el directorio remoto:
 Desde remoto
 ------------
 Si ya se disponía de una copia local del repositorio, pero la versión remota de
-éste cambió (p.e. porque otro desarrollador realizó cambios), pueden obtenerse
-las últimas modificaciones así:
+éste cambió (p.e. porque otro desarrollador realizó cambios), puede consultarse
+si hay actualizaciones así:
+
+.. code-block:: cosole
+
+   $ cd proyecto
+   $ git fetch
+
+Esto orden no realiza ningún cambio: simplemente analiza el estado del
+directorio local y del repositorio remoto y nos informa de si hay
+actualizaciones pendientes. Para llevarlas a cabo de forma efectiva habría que
+hacer:
 
 .. code-block:: console
 
-   $ cd proyecto
    $ git pull
+
+.. note:: Se puede hacer un *pull* sin necesidad de hacer antes un *fetch*.
 
 .. warning:: Tenga en cuenta que es común que un proyecto disponga de
    distintas `ramas`_.
