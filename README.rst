@@ -156,8 +156,21 @@ si hay actualizaciones así:
 
 Esto orden no realiza ningún cambio: simplemente analiza el estado del
 directorio local y del repositorio remoto y nos informa de si hay
-actualizaciones pendientes. Para llevarlas a cabo de forma efectiva habría que
-hacer:
+actualizaciones pendientes. Tocaría ahora comprobar cuáles son exactamente estas
+actualizaciones para lo que podríamos hacer:
+
+.. code-block:: console
+
+   $ git log HEAD..origin/main
+
+si simplemente queremos ver qué *commits* se han llevado a cabo o:
+
+.. code-block:: console
+
+   $ git diff HEAD origin/main
+
+Para observar todas las diferenciias exhaustivamente. Si quisiéramos aplicar los
+cambios, habría que hacer finalmente:
 
 .. code-block:: console
 
