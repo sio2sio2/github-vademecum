@@ -169,7 +169,7 @@ si simplemente queremos ver qué *commits* se han llevado a cabo o:
 
    $ git diff HEAD origin/main
 
-Para observar todas las diferenciias exhaustivamente. Si quisiéramos aplicar los
+para observar todas las diferenciias exhaustivamente. Si quisiéramos aplicar los
 cambios, habría que hacer finalmente:
 
 .. code-block:: console
@@ -230,6 +230,28 @@ Para cambiar entre ramas:
    $ git checkout master
 
 donde *master* es el nombre de la rama a la que queremos cambiar.
+
+Comparación
+-----------
+
+Si queremos comprobar qué *commits* hay de diferencia entre una y otra rama:
+
+.. code-block:: console
+
+   $ git log rama1..rama2
+
+y si queremos conocer en concreto todos los cambios:
+
+.. code-block:: console
+
+   $ git diff rama1..rama2
+
+aunque, como siempre ocurre con `diff`, se puede restringir aquellos de lo que
+queremos obtener las diferencias:
+
+.. code-block:: console
+
+   $ git diff rama1..rama2 -- ruta/hacia/algun/sitio
 
 Fusión
 ------
