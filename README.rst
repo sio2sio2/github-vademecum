@@ -1,432 +1,84 @@
 Vademécum
 *********
-Configuración del *git* local
-=============================
-Tras instalar es conveniente antes de empezar  indicar cuál es el usuario que
-realizará los cambios:
-
-.. code-block:: console
-
-   $ git config --global user.name "Perico de los Palotes"
-   $ git config --glonal user.email "perico@example.com"
-
-Y agilizar las autenticaciones:
-
-.. code-block:: console
-
-   $ git config --global credential-helper "cache --timeout=3600"
-
-Esta última línea conserva en memoria la contraseña durante 1 hora. El problema
-de esta solución es que Github últimamente no permite el acceso mediante usuario
-y contraseña, con lo que tenemos dos alternativas prácticas:
-
-+ Utilizar un **token personal de acceso**, que sustituirá a la contraseña en
-  las autenticaciones y se genera en la propia página de Github a través de
-  ``Settings>Developer Settings>Access Personal Token``. Estos *tokens* son muy
-  largos y complicados de memorizar y digitalizar por lo que se hace
-  indispensable usar un gestor de contraseñas. En *Linux* puede usarse el
-  derivado de `Gnome Keyring <https://wiki.gnome.org/Projects/GnomeKeyring>`_:
-
-  .. code-block:: console
-
-     $ git config --global credential-helper "/ruta/donde/este/git-credential-libsecret"
-     $ git config --global credential.credentialStore secretservice
-
-  Es probable que la distribución no disponga del complemento compilado y
-  haya que hacerlo a mano como se explica en `este tutorial
-  <https://itectec.com/ubuntu/ubuntu-the-correct-way-to-use-git-with-gnome-keyring-and-https-repos/>`_.
-
-  Hecho esto, la primera vez habrá que autenticarse usando el usuario y este
-  largo token, pero las restantes veces no será necesario, porque las
-  credenciales quedarán almacenadas en el gestor de contraseñas.
-
-+ Utilizar la autenticación OAuth para lo cual existe en las modernas
-  distribuciones  :command:`git-credential-oauth`. Instalada en el sistema,
-  puede usarse esta configuración:
-
-  .. code-block:: console
-
-     $ git config --global credential-helper "cache --timeout=3600"
-     $ git config --global credential-helper oauth
-
-  De esta forma, al autenticarnos, el proceso de validación nos derivará el
-  navegador para nos validemos y durante una hora las credenciales serán
-  recordadas. Es importante que este sea el orden (primero la declaración de
-  usar la caché), porque de lo contrario la caché no funcionará.
-
-Creación de un repositorio
-==========================
-Al crear un repositorio tenemos dos alternativas:
-
-- Clonar un repositorio ya creado.
-- Crear uno *ex novo*.
-
-Clonación
----------
-
-.. code-block:: console
-
-  $ git clone https://github.com/sio2sio2/proyecto.git
-
-Creación
---------
-
-.. code-block:: console
-
-   $ mkdir proyecto
-   $ cd proyecto
-   $ git init
-   $ cat > .gitignore
-   **.bak
-   **.swp
-   $ echo "Documentacion..." > README.rst
-
-.. note:: ``,gitignore`` excluye ficheros que no queramos que formen parte
-   del repositorio. En este caso, hemos incluido copias de seguridad y archivos
-   de intercambio de **vim**. La notación :code:`**.ext`` significa
-   todo fichero con la extensión indicada esté en el subdirectorio que esté.
-
-Si se desea crear un nuevo repositorio en Github_ a partir de este nuevo, hay
-dos posibilidades:
-
-- Crearlo a través de la web sin inicializarlo (o sea sin crearle un
-  ``README.md``),
-
-- Crearlo a través de la `API REST de Github
-  <https://developer.github.com/v3/repos/>`_, después de haber `definido un
-  token apropiado <https://github.com/settings/tokens>`_, esto es, un *token*
-  que tenga habilitado al menos el `alcance public_repo
-  <https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/#available-scopes>`_:
-
-  .. code-block:: console
-
-     $ wget -qO - -S --header "Authorization: token XXXXXXX" \
-         --post-data '{"name": "proyecto", "description": "Una descripción del proyecto"}' \
-         https://api.github.com/user/repos
-
-para después realizar una `Actualización`_ y finalmente:
-
-.. code-block:: console
-
-   $ git remote add origin https://github.com/sio2sio2/proyecto.git
-   $ git push -u origin master
-
-Actualización
-=============
-Desde local
------------
-Si se han modificado ficheros en el repositorio local, pueden comprobarse los
-cambios del siguiente modo:
-
-.. code-block:: console
-
-   $ cd proyecto
-   $ git status  # Conocemos la rama en la que estamos y cuáles son los ficheros.
-   $ git diff    # Si queremos ver las diferencias entre los ficheros.
-   $ git diff -- fichero  # Para ver los cambios en el fichero referido.
-
-Para llevar a cabo la actualización:
-
-.. code-block:: console
-
-   $ git add --all .
-   $ git commit -m "Comentario que describa la actualización"
-
-Si la actualización requiere un comentario más exaustivo. se puede utilizar un
-fichero con sintaxis Markdown_::
-
-   $ git commit -F comentario.md
-
-Por último, si queremos sincronizar con el directorio remoto:
-
-.. code-block:: console
-
-   $ git push
-
-Desde remoto
-------------
-Si ya se disponía de una copia local del repositorio, pero la versión remota de
-éste cambió (p.e. porque otro desarrollador realizó cambios), puede consultarse
-si hay actualizaciones así:
-
-.. code-block:: cosole
-
-   $ cd proyecto
-   $ git fetch
-
-Esto orden no realiza ningún cambio: simplemente analiza el estado del
-directorio local y del repositorio remoto y nos informa de si hay
-actualizaciones pendientes. Tocaría ahora comprobar cuáles son exactamente estas
-actualizaciones para lo que podríamos hacer:
-
-.. code-block:: console
-
-   $ git log HEAD..origin/main
-
-si simplemente queremos ver qué *commits* se han llevado a cabo o:
-
-.. code-block:: console
-
-   $ git diff HEAD origin/main
-
-para observar todas las diferenciias exhaustivamente. Si quisiéramos aplicar los
-cambios, habría que hacer finalmente:
-
-.. code-block:: console
-
-   $ git pull
-
-.. note:: Se puede hacer un *pull* sin necesidad de hacer antes un *fetch*.
-
-.. warning:: Tenga en cuenta que es común que un proyecto disponga de
-   distintas `ramas`_.
-
-Ramas
-=====
-Las diversas ramas de un mismo repositorio permiten tener simultáneamente
-distintas variantes del desarrollo. Por ejemplo, un desarrollador puede abrir
-una rama nueva para implementar una nueva funcionalidad y, cuando la tenga lista
-y se apruebe su inclusión, fusionarla con la rama principal.
-
-La rama principal (la que se crea al crear el repositorio) se llama *master*. Es
-común también crear otra rama llamada *development* donde van convergiendo las
-distintas ramas que aparecen y desaparecen según las necesidades.
-
-Creación
---------
-.. code-block:: console
-
-   $ git checkout -b development
-
-Esto clona la rama en la que se esté actualmente (supongamos que *master*) en
-otra llama *development* y nos camb ia a ella. Ahora si se hace:
-
-.. code-block:: console
-
-   $ git status
-
-Comprobaremos que nos encontramos en la rama *development*. Ahora podemos
-realizar cambios sobre esta rama y actualizarma como ya se ha visto. Si queremos
-subir la rama al servidor de Github_:
-
-.. code-block:: console
-
-   $ git push -u origin development
-
-pero sólo esta primera vez para sincronizar la rama con una rama aún inexistente
-en el servidor también llamada *development*. A partir de este momento, las
-siguientes sincronizaciones sí podremos hacerlas como ya se indicó:
-
-.. code-block:: console
-
-   $ git push
-
-Cambio
-------
-Para cambiar entre ramas:
-
-.. code-block:: console
-
-   $ git checkout master
-
-donde *master* es el nombre de la rama a la que queremos cambiar.
-
-Comparación
------------
-
-Si queremos comprobar qué *commits* hay de diferencia entre una y otra rama:
-
-.. code-block:: console
-
-   $ git log rama1..rama2
-
-y si queremos conocer en concreto todos los cambios:
-
-.. code-block:: console
-
-   $ git diff rama1..rama2
-
-aunque, como siempre ocurre con `diff`, se puede restringir aquellos de lo que
-queremos obtener las diferencias:
-
-.. code-block:: console
-
-   $ git diff rama1..rama2 -- ruta/hacia/algun/sitio
-
-Fusión
-------
-Para fusionar la rama *development* con con la actual (*master*):
-
-.. code-block:: console
-
-   $ git merge development
-
-Borrado
--------
-Para borrar una rama local:
-
-.. code-block:: console
-
-   $ git branch -d development
-
-Y si se quiere borrar del repositorio remoto:
-
-.. code-block:: console
-
-   $ git push origin :development
-
-Versiones
-=========
-Para etiquetar un estado como versión:
-
-.. code-block:: console
-
-   $ git tag -a v1.0 -m "Versión 1.0"
-   $ git push --tags
-
-Para eliminar una etiqueta en local basta con:
-
-.. code-block:: console
-
-   $ git tag -d v1.0
-
-y para eliminarla en el repositorio remoto, se hace de la misma forma que cuando
-se eliminan ramas:
-
-.. code-block:: console
-
-   $ git push origin :v1.0
-
-Regresión
-=========
-Commit antiguo
---------------
-En alguna ocasión puede ser útil volver a un estado antiguo. Para ello podemos
-crear una rama independiente:
-
-.. code-block:: console
-
-   $ git checkout -b test
-
-y cambiar al commit que deseemos:
-
-.. code-block::
-
-   $ git log --oneline
-   f446e5e (HEAD -> test) Comentario...
-   8abe916 Comentario...
-   2c595db Comentario...
-   bfe76b5 Comentario...
-   $ git reset 2c595db
-   $ git restore .
-
-Archivos
---------
-Si queremos deshacer los cambios hechos en un archivo que aún no se han fijado
-con un commit tenemos dos posibilidaes:
-
-* Si ya se hizo un ``git add`` (el archivo aparece en verde al ahcer un *status*),
-  podemos hacer:
-
-  .. code-block:: console
-
-     $ git restore --staged --worktree -- path/archivo
-
-  Si se prescinde de ``--worktree`` el archivo  quedará en el estado anterior al
-  ``git add`` (en rojo).  Si se especifica un directorio se restaurán todos los
-  archivos modificados dentro de él.
-
-* Si el archivo está modificado, pero sin haber hecho un ``git add`` (aparece en
-  rojo):
-
-  .. code-block:: console
-
-     $ get restore -- path/archivo
-     
-  Esto eliminará todos los cambios en el archivo.
-
-Varias cuentas
-==============
-Cuando se tienen varias cuentas en Github (p.e. una personal y otra de trabajo)
-nos encontraremos con el problema que el gestor de contraseñas, en principio,
-almacena estas credenciales atendiendo únicamente el nombre de máquina
-(`github.com`), por lo que únicamente podremos usar unas únicas credenciales.
-Tenemos al menos tres alternativas para solucionarlo:
-
-#. Usar el nombre del usuario como parte del nombre de máquina, es decir, en
-   vez de haber relacionado directorio local con repositorio remoto así:
-
-   .. code-block:: console
-
-      $ git remote add origin https://github.com/sio2sio2/proyecto.git
-
-   deberíamos relacionarlo así:
-
-   .. code-block:: console
-
-      $ git remote add origin https://sio2sio2@github.com/sio2sio2/proyecto.git
-
-   Y en caso de que está relación ya la hubiéramos hecho, aún podríamos acceder
-   al archivo `.git/config` y editar la URL en la directiva correspondiente para
-   añadir el usuario al nombre.
-
-   La ventaja de este procedimiento es que no necesitaremos introducir
-   nuevamente el token cada vez que creemos un repositorio relacionado con el
-   usuario.
-
-   Esta técnica parece no funcionar. Al menos con :command:`git-credential-libsecret`
-
-#. Añadir a la configuración global:
-
-   .. code-block:: console
-
-      $ git config --global credential.useHttpPath "true"
-
-   que provoca que al apuntar las credenciales en el gestor se use toda la URL y
-   no solamente el nombre de máquina. La desventaja de esta solución es que cada
-   vez que creemos un repositorio nuevo, tendremos que facilitar las
-   credenciales.
-
-#. Usar sendos métodos de validación (helper) diferentes para lo que podemos usar
-   la configuración condicional que trataremos después o definir las
-   credenciales dependiendo de cuál sea la ruta con la que sincronicemos:
-
-   .. code-block:: ini
-
-      [credential "https://github.com/sio2sio2/"]
-      helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
-      credentialStore = secretservice
-      [credential "https://github.com/otrousuario/"]
-      helper = "cache --timeout=7200"
-      helper = oauth
-
-Cualquiera de las tres alternativas nos solucionaría la autenticación. Sin
-embargo, también es probable que queramos cambiar quién será el que rece como
-autor de los cambios. Para ello puede utilizarse la `configuración condicional
-<https://github.blog/2017-05-10-git-2-13-has-been-released/#conditional-configuration>`_
-introducida a partir de :program:`git` 2.13. De este modo, si tuviéramos la
-prevención de que los desarrollos de uno de los usuarios siempre estuvieran
-dentro de la misma ruta podríamos hacer:
-
-.. code-block:: ini
-
-   # Esto es ~/.gitconfig
-   [user]
-   name = Perico de los Palotes
-   email = perico@example.com
-
-   [includeIf "gitdir:~/Programacion/Trabajo/"]
-   path = ~/Programacion/Trabajo/.gitconfig
-
-Y en ese segundo archivo de configuración:
-
-.. code-block:: ini
-
-   # Esto es ~/Programacion/Trabajo/.gitconfig
-   [user]
-   name = Pedro Palotes
-   email = pedropalotes@corporacion.com
-
-
-.. _Github: https://github.com
-.. _Markdown:  https://daringfireball.net/projects/markdown/
+Un *repositorio Git* es un conjunto estructurado de archivos (un proyecto, si se
+prefiere) del que se conserva su historial de cambios (*commits*), de manera que
+se puede restaurar uno o hacer comparaciones entre ellos. Este historial,
+además, no es líneal, sino que puede bifurcarse en ramas que divergen o incluso
+que llegado el caso acaban convergiendo después:
+
+.. _figura 1:
+
+.. image:: files/git.svg
+
+Repositorio
+===========
+En la `figura 1`_ los boliches representan versiones del
+proyecto que conserva el repositorio. Estas versiones se crean al realizar una
+confirmación de cambios (*commit*) y se identifican por un *hash* (`af78aeb1`,
+`e5c112ea`, etc).
+
+**Commit**
+   Es una versión histórica de los archivos del proyecto y se identifica por un
+   *hash* único. Un *commit* se origina al añadir modificaciones a un *commit*
+   anterior. En la `figura 1`_ el commit `8a0d2ba8` es
+   consecuencia de haber aplicado cambios (creación, borrado, modificación de
+   archivos) al *commit* justamente anterior, el `da7c8245`.
+
+**Tag** (etiqueta)
+   Es una referencia estática a un *commit* determinado que permite identificarlo
+   con un nombre alternativo fácilmente recordable. Muy comúnmente, si el
+   repositorio es de código, identifica una versión de la aplicación y en
+   consecuencia los nombres suelen ser *v1.2.0* o *2025.04*.
+
+   Al definir una etiqueta pueden asociarse metadatos como un comentario, un
+   autor, etc.
+
+**HEAD**
+   Es el puntero que señala la versión (*commit*) activa del proyecto. Esto
+   quiero decir que, si consultamos los archivos, nos encontraremos con los
+   contenidos que tenían en esa versión.
+
+**Branch** (rama)
+   Es un puntero (una referencia dinámica) a un *commit*. Es dinámico en la
+   medida en que, si estamos en una rama (o lo que es lo mismo, el *HEAD* apunta
+   al mismo *commit* que dicha rama), al hacer cambios y generar un nuevo
+   *commit*, tanto el *HEAD* como la rama apuntarán a ese nuevo *commit*. En el
+   ejemplo, la rama activa es **main**, ya que el *commit* activo es `674e3172`.
+   Si hacemos algumos cambios y generamos un nuevo *commit* `f932eb8`, tanto
+   *HEAD* como **main** apuntarán automáticamente a este nuevo *commit*:
+
+   .. _figura_2:
+
+   .. image:: files/git2.svg
+
+Como un *commit* debe tener un padre a partir del cual se originó, Git permite
+referir un ascendiente a partir de un descediente usando el operador virgulilla
+(``~``). Volviendo a la `figura 1`_:
+
+* ``HEAD~1`` es el padre de `HEAD`, o sea, `3b02bbgf`.
+* ``experimental~2`` es el abuelo de la rama `experimental`, o sea, `558302c9`.
+* ``8a0d2ba8~1`` es el padre de `8a0d2ba8`, o sea, `da7c8245`.
+
+Ahora bien, hay un caso especial en que hay más de un padre: las bifurcaciones.
+`v1.0` (o `3b02bb6f` como queramos referirlo) tiene dos padres: `e5c112ea` y
+`deba176e`. En estos caso, se considera el primer padre, aquel que fue de la
+misma rama; y el segundo padre, aquel que fue de otra rama. Por tanto,
+`e5c112ea` es el primer padre y `deba176e` es el segundo. En estos casos:
+
+* ``v1.0~1`` es el primer padre, esto es, `e5c112ea`; y ``v1.0~2`` el padre del
+  primer padre, esto es, `af78aeb1`.
+* ``v1.0^2`` es el segundo padre, esto es, `deba176e`; y ``v1.0^2~1`` el padre
+  del segundo padre, esto es, `8a0d2ba8`.
+
+Una característica a tener en cuenta de los *commits* es que necesitan estar
+referenciados de algún modo para que Git no los acabe desechando. Los padres
+siempre están referenciados por los hijos, como acabamos de ver, por lo que en
+realidad el problema podría estar en los *commits* terminales si no les hemos
+asociado ninguna rama. Por ejemplo, en el gráfico, `ddbaebaa` es un nodo
+terminal y está referenciado por la rama `experimental`, por lo que no se
+perderá. Sin embargo, si no estuviera referenciado por esta rama, no tendría
+referencia ninguna y a la postre Git lo desecharía a él y a `7172f279` y
+`558302c9`.
+
+Flujo de trabajo
+================
